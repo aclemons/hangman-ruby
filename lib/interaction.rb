@@ -38,22 +38,22 @@ class Interaction
     "\nYou win!"
   end
 
-protected
-  def validate_letter(letter, hangman)
-    if letter.length != 1
-      return [ false,  "Invalid input. Try again." ]
-    end
+  protected
+    def validate_letter(letter, hangman)
+      if letter.length != 1
+        return [ false,  "Invalid input. Try again." ]
+      end
 
-    if hangman.used?(letter)
-      return [ false, "Letter already used. Try again." ]
-    end
+      if hangman.used?(letter)
+        return [ false, "Letter already used. Try again." ]
+      end
 
-    if not letter =~ /\A[[:alpha:]]\z/
-      return [ false, "Input not a letter. Try again." ]
-    end
+      if not letter =~ /\A[[:alpha:]]\z/
+        return [ false, "Input not a letter. Try again." ]
+      end
 
-    return [ true, nil ]
-  end
+      return [ true, nil ]
+    end
 end
 
 class ConsoleInteraction < Interaction

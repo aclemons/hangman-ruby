@@ -53,40 +53,40 @@ class TkGame
     @entry.focus
   end
 
-private
+  private
 
-  def init_label(top, ph)
-    label = TkLabel.new(top, 'textvariable' => @output)
-    label.pack(ph)
-  end
+    def init_label(top, ph)
+      label = TkLabel.new(top, 'textvariable' => @output)
+      label.pack(ph)
+    end
 
-  def init_input(top, ph)
-    @entry = TkEntry.new(top, 'textvariable' => @input)
-    @entry.pack(ph)
-  end
+    def init_input(top, ph)
+      @entry = TkEntry.new(top, 'textvariable' => @input)
+      @entry.pack(ph)
+    end
 
-  def init_buttons(top, guess_proc, restart_proc, ph)
-    @guess_button = TkButton.new(top) { text 'Guess'; command guess_proc; pack ph }
-    @restart_button = TkButton.new(top) { text 'Restart'; command restart_proc; pack ph }
-  end
+    def init_buttons(top, guess_proc, restart_proc, ph)
+      @guess_button = TkButton.new(top) { text 'Guess'; command guess_proc; pack ph }
+      @restart_button = TkButton.new(top) { text 'Restart'; command restart_proc; pack ph }
+    end
 
-  def guess_hangman
-    letter = @interaction.get_letter @hangman
+    def guess_hangman
+      letter = @interaction.get_letter @hangman
 
-    if letter
-      @hangman.guess letter
-      @input.value = ""
+      if letter
+        @hangman.guess letter
+        @input.value = ""
 
-      @interaction.show_status(@hangman)
+        @interaction.show_status(@hangman)
 
-      if @hangman.solved?
-        @interaction.notify_won
-        @guess_button.state('disabled')
-      elsif @hangman.game_over?
-        @interaction.notify_lost @word
-        @guess_button.state('disabled')
+        if @hangman.solved?
+          @interaction.notify_won
+          @guess_button.state('disabled')
+        elsif @hangman.game_over?
+          @interaction.notify_lost @word
+          @guess_button.state('disabled')
+        end
       end
     end
-  end
 
 end
