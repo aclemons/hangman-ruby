@@ -22,11 +22,7 @@ class Interaction
   def show_status(hangman)
     status_text = "You have #{hangman.lives} #{hangman.lives == 1 ? "life" : "lives"} left\n"
 
-    blanks = hangman.game_status.each_with_object([]) do |(letter, status), arr|
-      arr << "#{status ? letter : "_"}"
-    end
-
-    status_text += blanks.join(" ")
+    status_text += hangman.game_status.map { |letter, status| "#{status ? letter : "_"}" }.join(" ")
     status_text += "\n"
 
     status_text += "\nUsed letters: [ "
@@ -52,7 +48,7 @@ protected
       return [ false, "Letter already used. Try again." ]
     end
 
-    if not letter =~ /[[:alpha:]]/
+    if not letter =~ /\A[[:alpha:]]\z/
       return [ false, "Input not a letter. Try again." ]
     end
 

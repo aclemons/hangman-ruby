@@ -25,8 +25,8 @@ class Hangman
     @word, @lives = word, lives
     @normalised_word = word.upcase
 
-    # hash of index,true|false pairs
-    @status = 0.upto(@word.length - 1).each_with_object({}) { |i, hash| hash[i] = false }
+    # array where each index holds solved state of chars in @word
+    @status = 0.upto(@word.length - 1).map { false }
     @used = Set.new
   end
 
@@ -47,14 +47,12 @@ class Hangman
     @used.add normalised_letter
 
     # collect indices of new matches
-    matches = @normalised_word.chars.to_a.each_with_object({}).with_index do |(c, hash), i|
-      hash[i] = true if c == normalised_letter
-    end
+    matches = @normalised_word.chars.to_a.map { |c| c == normalised_letter }
 
-    if matches.empty?
-      @lives -= 1
+    if matches.include?(true)
+      matches.each_with_index { |m, i| @status[i] ||= m }
     else
-      @status.merge!(matches)
+      @lives -= 1
     end
 
     # did the guess match
@@ -62,7 +60,7 @@ class Hangman
   end
 
   def solved?
-    !@status.has_value?(false)
+    !@status.include?(false)
   end
 
   def used?(letter)
@@ -79,9 +77,7 @@ class Hangman
 
   # arr of char,true|false pairs
   def game_status
-    0.upto(@word.length - 1).each_with_object([]) do |i, arr|
-      arr.push([ @word[i], @status[i] ])
-    end
+    0.upto(@word.length - 1).map { |i| [ @word[i], @status[i] ] }
   end
 
 end
